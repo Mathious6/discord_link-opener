@@ -13,13 +13,16 @@ async function removeDomElements() {
     const sideBar = await waitForElement('.sidebar_ded4b5');
     const titleBar = await waitForElement('.title_b7d661');
     const formBar = await waitForElement('.form__13a2c');
-    const membersBar = await waitForElement('.container_b2ce9c');
 
     guildsNav.remove();
     sideBar.remove();
     titleBar.remove();
     formBar.remove();
-    membersBar.remove();
+
+    const membersBar = document.querySelector('.container_b2ce9c');
+    if (membersBar) {
+        membersBar.remove();
+    }
 }
 
 async function monitor(regexFilter) {
