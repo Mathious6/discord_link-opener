@@ -59,6 +59,7 @@ async function monitor(regexFilter) {
 async function main() {
     try {
         const storage = await getStorage();
+        console.log('Storage:', storage);
         const url = storage.channelUrl;
         const regex = storage.regexFilter;
 
@@ -92,7 +93,7 @@ async function waitForElement(selector) {
 async function getStorage() {
     return new Promise((resolve, reject) => {
         chrome.storage.local.get(['channelUrl', 'regexFilter'], function (result) {
-            if (result.channelUrl && result.regexFilter) {
+            if (result.channelUrl) {
                 resolve(result);
             } else {
                 reject('Channel URL or regex filter not found in storage.');

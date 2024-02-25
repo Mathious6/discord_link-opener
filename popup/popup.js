@@ -28,7 +28,7 @@ function saveSettings() {
 
     chrome.storage.local.set({
         channelUrl: channelUrl,
-        regexFilter: regexFilter
+        regexFilter: regexFilter || ""
     }, function () {
         window.close();
     });
