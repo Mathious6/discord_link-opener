@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "Discord link-opener",
+  "description": "Automatically open Discord links in your browser after being filtered through a regular expression.",
+  "version": "1.0",
+  "permissions": [
+    "storage",
+    "tabs"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://discord.com/*"
+      ],
+      "js": [
+        "scripts/content.js"
+      ]
+    }
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "images/Discord_16.png",
+      "32": "images/Discord_32.png",
+      "48": "images/Discord_48.png",
+      "128": "images/Discord_128.png"
+    }
+  },
+  "icons": {
+    "16": "images/Discord_16.png",
+    "32": "images/Discord_32.png",
+    "48": "images/Discord_48.png",
+    "128": "images/Discord_128.png"
+  }
+}

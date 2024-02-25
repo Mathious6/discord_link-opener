@@ -1,0 +1,44 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 10px;
+    padding: 10px;
+    border: 5px solid rgba(0, 120, 200, 0.5);
+}
+
+.container {
+    width: 500px;
+    max-width: 100%;
+    padding: 10px;
+}
+
+h2 {
+    text-align: center;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+}
+
+#monitor {
+    background-color: rgba(0, 120, 200, 0.8);
+}
+
+#monitor:hover {
+    background-color: rgba(0, 120, 200, 1);
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid black;
+    border-radius: 4px;
+    font-size: 13px;
+}
