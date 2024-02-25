@@ -5,6 +5,8 @@ Thanks to regular expressions, you can automatically open links from your favori
 
 The extension will monitor the provided channel and open the first link that matches the regular expressions.
 
+![demo_gif](./images/demo.gif)
+
 ## How to use 📖
 
 1. **Install the extension:** Follow [these instructions](#installation-) to install the extension in your Chrome browser.
