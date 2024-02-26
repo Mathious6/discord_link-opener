@@ -1,4 +1,4 @@
-chrome.runtime.onMessage.addListener(async function (request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(async function (request) {
     if (request.type === "openDiscord") {
         window.location.href = request.url;
     }
@@ -92,12 +92,12 @@ async function waitForElement(selector) {
 }
 
 async function getStorage() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         chrome.storage.local.get(['channelUrl', 'regexFilter'], function (result) {
             if (result.channelUrl) {
                 resolve(result);
             } else {
-                reject('Channel URL or regex filter not found in storage.');
+                console.log('Channel URL or regex filter not found in storage.');
             }
         });
     });
