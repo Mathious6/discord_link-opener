@@ -42,7 +42,8 @@ async function monitor(regexFilter) {
 
                     if (links.length > 0) {
                         overlay('Opening link...', "rgba(91,201,53,0.8)");
-                        await sleep(500);
+                        // TODO: add delay form on the popup
+                        await sleep(Math.random() * 3000 + 500);
                         window.open(links[0], '_blank');
                         observer.disconnect();
                         break;
