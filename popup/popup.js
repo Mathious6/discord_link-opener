@@ -1,10 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
     loadSettings();
 
-    document.getElementById('monitor').addEventListener('click', function () {
-        saveSettings();
-        openDiscordUrl();
-    });
+    document.getElementById('monitor').addEventListener('click', openDiscordUrl);
+
+    document.getElementById('channelUrl').addEventListener('blur', saveSettings);
+    document.getElementById('regexFilter').addEventListener('blur', saveSettings);
+    document.getElementById('openingDelay').addEventListener('blur', saveSettings);
 });
 
 function saveSettings() {
@@ -39,7 +40,6 @@ function saveSettings() {
         openingDelay: openingDelay || 0
     }, function () {
         console.log('Settings saved');
-        window.close();
     });
 }
 
@@ -60,6 +60,7 @@ function openDiscordUrl() {
         chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
             const currentTab = tabs[0];
             if (currentTab.url.startsWith("https://discord.com/")) {
+                window.close();
                 chrome.tabs.sendMessage(currentTab.id, {
                     type: "openDiscord",
                     url: channelUrl
