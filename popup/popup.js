@@ -10,9 +10,11 @@ document.addEventListener('DOMContentLoaded', function () {
 function saveSettings() {
     const channelUrl = document.getElementById('channelUrl').value;
     const regexFilter = document.getElementById('regexFilter').value;
+    const openingDelay = document.getElementById('openingDelay').value;
 
     document.getElementById('channelUrl').style.backgroundColor = "";
     document.getElementById('regexFilter').style.backgroundColor = "";
+    document.getElementById('openingDelay').style.backgroundColor = "";
 
     if (!channelUrl) {
         document.getElementById('channelUrl').style.backgroundColor = "rgba(190,25,43,0.2)";
@@ -26,26 +28,33 @@ function saveSettings() {
         return;
     }
 
+    if (Number(openingDelay) < 0) {
+        document.getElementById('openingDelay').style.backgroundColor = "rgba(190,25,43,0.2)";
+        return;
+    }
+
     chrome.storage.local.set({
         channelUrl: channelUrl,
-        regexFilter: regexFilter || ""
+        regexFilter: regexFilter || "",
+        openingDelay: openingDelay || 0
     }, function () {
+        console.log('Settings saved');
         window.close();
     });
 }
 
 function loadSettings() {
-    chrome.storage.local.get(['channelUrl', 'regexFilter'], function (result) {
+    chrome.storage.local.get(['channelUrl', 'regexFilter', 'openingDelay'], function (result) {
         if (result.channelUrl) {
             document.getElementById('channelUrl').value = result.channelUrl;
             document.getElementById('regexFilter').value = result.regexFilter || "";
+            document.getElementById('openingDelay').value = result.openingDelay || 0;
         }
     });
 }
 
 function openDiscordUrl() {
     const channelUrl = document.getElementById('channelUrl').value;
-    const regexFilter = document.getElementById('regexFilter').value;
 
     if (channelUrl) {
         chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {

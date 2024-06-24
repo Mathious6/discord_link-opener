@@ -5,7 +5,8 @@
   "version": "1.0",
   "permissions": [
     "storage",
-    "tabs"
+    "tabs",
+    "tts"
   ],
   "content_scripts": [
     {
@@ -17,6 +18,9 @@
       ]
     }
   ],
+  "background": {
+    "service_worker": "scripts/background.js"
+  },
   "action": {
     "default_popup": "popup/popup.html",
     "default_icon": {

@@ -1,5 +1,6 @@
 chrome.runtime.onMessage.addListener(async function (request) {
     if (request.type === "openDiscord") {
+        console.info(`Opening Discord channel: #${request.url.split('/').pop()}`);
         window.location.href = request.url;
     }
 });
@@ -9,29 +10,28 @@ main().catch(error => console.error('Error in main:', error));
 async function removeDomElements() {
     overlay('Waiting for Discord to load...');
 
-    const guildsNav = await waitForElement('.wrapper_a7e7a8');
-    const sideBar = await waitForElement('.sidebar_ded4b5');
-    const titleBar = await waitForElement('.title_b7d661');
-    const formBar = await waitForElement('.form__13a2c');
+    // CAUTION: This part is very fragile and may break if Discord changes its class names.
+    const guildsNav = await waitForElement('[aria-label="Servers sidebar"]');
+    const sideBar = await waitForElement('[class^="sidebar_"]');
+    const titleBar = await waitForElement('[aria-label="Channel header"]');
+    const formBar = await waitForElement('[class^="form_"]');
 
     guildsNav.remove();
     sideBar.remove();
     titleBar.remove();
     formBar.remove();
 
-    const membersBar = document.querySelector('.container_b2ce9c');
-    if (membersBar) {
-        membersBar.remove();
-    }
+    const membersBar = document.querySelector('[class^=content_] > [class^=container_]');
+    if (membersBar) membersBar.remove();
 }
 
-async function monitor(regexFilter) {
+async function monitor(regexFilter, delay = 0) {
     const regex = new RegExp(regexFilter, 'i');
 
     const observer = new MutationObserver(async mutations => {
         for (const mutation of mutations) {
             const addedNodes = Array.from(mutation.addedNodes).filter(node =>
-                node.nodeType === 1 && node.matches('.messageListItem__6a4fb'));
+                node.nodeType === 1 && node.matches('[class^="messageListItem_"]'));
 
             if (addedNodes.length > 0) {
                 for (const node of addedNodes) {
@@ -41,10 +41,10 @@ async function monitor(regexFilter) {
                         .filter(url => regex.test(url));
 
                     if (links.length > 0) {
-                        overlay('Opening link...', "rgba(91,201,53,0.8)");
-                        // TODO: add delay form on the popup
+                        overlay(`Opening link on ${delay}ms...`, "rgba(91,201,53,0.8)");
+                        chrome.runtime.sendMessage({ type: "speak", message: 'Opening link...' });
                         observer.disconnect();
-                        await sleep(Math.random() * 3000 + 500);
+                        await sleep(delay);
                         window.open(links[0], '_blank');
                         break;
                     }
@@ -60,16 +60,17 @@ async function monitor(regexFilter) {
 async function main() {
     try {
         const storage = await getStorage();
-        console.log('Storage:', storage);
+
         const url = storage.channelUrl;
         const regex = storage.regexFilter;
+        const delay = storage.openingDelay;
 
         if (window.location.href === url) {
             overlay('Ready to monitor this channel...');
             await sleep(2000);
             await removeDomElements();
             await sleep(1000);
-            await monitor(regex);
+            await monitor(regex, delay);
         }
     } catch (error) {
         console.error('Error in main:', error);
@@ -93,11 +94,11 @@ async function waitForElement(selector) {
 
 async function getStorage() {
     return new Promise((resolve) => {
-        chrome.storage.local.get(['channelUrl', 'regexFilter'], function (result) {
+        chrome.storage.local.get(['channelUrl', 'regexFilter', 'openingDelay'], function (result) {
             if (result.channelUrl) {
                 resolve(result);
             } else {
-                console.log('Channel URL or regex filter not found in storage.');
+                console.log('Channel URL not found in storage.');
             }
         });
     });
