@@ -9,6 +9,9 @@ The extension will monitor the provided channel and open the first link that mat
 
 ## How to use 📖
 
+> [!WARNING]  
+> Discord language must be set to English.
+
 1. **Install the extension:** Follow [these instructions](#installation-) to install the extension in your Chrome browser.
 2. **Open Discord:** Open Discord and click on the extension icon in the top right corner of your browser.
 3. **Customize the extension:** You have to fill the channel URL and optionally add regular expressions to match the links you want to open.
